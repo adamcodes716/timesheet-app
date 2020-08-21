@@ -23,7 +23,10 @@ export default class TimesheetAppWebPart extends BaseClientSideWebPart <ITimeshe
       {
         description: this.properties.description,
         context: this.context,
-        siteUrl: this.context.pageContext.web.absoluteUrl
+        siteUrl: this.context.pageContext.web.absoluteUrl,
+        displayName: this.context.pageContext.user.displayName,
+        managerName: this.context.pageContext.user.displayName
+
       }
     );
 

@@ -4,4 +4,6 @@ export interface ITimesheetAppProps {
   description: string;
   context: WebPartContext;
   siteUrl: string;
+  displayName: string;
+  managerName: string;
 }

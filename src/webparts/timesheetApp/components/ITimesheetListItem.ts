@@ -1,6 +1,9 @@
 export interface ITimesheetListItem {
-   ID: string;
+   Id: string;
+   TimesheetId: string;
    FullName: string;
    WeekEnding: string;
-   TotalHours: Number;
+   TotalHours: string;
+   Manager: string;
+   Status: string;
 }

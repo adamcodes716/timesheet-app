@@ -11,15 +11,44 @@
     @include ms-Grid-row;
     @include ms-fontColor-white;
     background-color: $ms-color-themeDark;
-    padding: 20px;
+    padding: 5px; //20px;
   }
 
-  .column {
+  .smallColumn {
     @include ms-Grid-col;
+    @include ms-lg3;
+   //  padding: 5px;
+   // @include ms-xlPush3;
+   // @include ms-lgPush3;
+   //   @include ms-lg2;
+    // margin-right: 5px;
+  }
+
+
+  .largeColumn {
+    @include ms-Grid-col;
+    @include ms-lg8;
+  }
+
+  .testColumn {
+    @include ms-Grid-col;
+    @include ms-xl6;
+    @include ms-xlPush3;
+    @include ms-lgPush3;
+    @include ms-lg6;
+  }
+
+  .column{
+    @include ms-Grid-col;
+    @include ms-sm6;
+    @include ms-md1;
     @include ms-lg10;
     @include ms-xl8;
     @include ms-xlPush2;
     @include ms-lgPush1;
+    //@media screen and (min-width: 1024px) and (max-width: 1365px) {
+    //  background-color: lime;
+    //}
   }
 
   .title {
