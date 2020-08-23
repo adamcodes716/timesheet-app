@@ -93,6 +93,7 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
 
     this.state = {
       status: "",
+      showTable: "true",
       TimesheetListItems : [],
       TimesheetListItem : {
           TimesheetId: "WT-" + uuidv4().toUpperCase().slice(-6),
@@ -126,13 +127,19 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
     public bindDetailsList(message: string) : void {
 
       this._getListItems().then(listItems => {
-        this.setState({ TimesheetListItems: listItems,status: message});
+        this.setState({ TimesheetListItems: listItems, status: message, showTable: this.state.showTable});
       });
     }
 
     public componentDidMount(): void {
       console.log("siteURL", this.props.siteUrl);
       this.bindDetailsList("All timesheets have been loaded Successfully");
+    }
+
+    @autobind
+    public btnCreate_click(): void {
+     // $("#timesheetContainer").show();
+      this.setState({ showTable: "false"});
     }
 
     @autobind
@@ -222,12 +229,12 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
         <div className={ styles.container }>
           <div className={ styles.row }>
             <div className={ styles.column }>
-              <span className={ styles.title }>Weekly Timesheet</span>
+              <span className={ styles.title }>Weekly Timesheet Application</span>
            </div>
           </div>
         </div>
 
-        <div className={ styles.container }>
+        <div id="timesheetContainger" className={ styles.container } style={{display: !(this.state.showTable === "true") ? 'block' : 'none' }}>
           <div className={ styles.row }>
           <div className={ styles.smallColumn }>
                 <TextField
@@ -287,12 +294,23 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
           </div>
 
 
-              <p className={styles.title}>
+
+
+          <div style={{display: this.state.showTable === "true" ? 'block' : 'none' }}>
+                <p className={styles.title}>
+                <PrimaryButton
+                    text='Create'
+                    title='Create'
+                    onClick={this.btnCreate_click}
+                  />
+                  &nbsp;
+
                    <PrimaryButton
                     text='Add'
                     title='Add'
                     onClick={this.btnAdd_click}
                   />
+                  &nbsp;
 
                   <PrimaryButton
                     text='Update'
@@ -304,24 +322,29 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
                     onClick={this.btnDelete_click}
                   />
                 </p>
+              </div>
 
-
+              <div  className={ styles.container } >
                 <div id="divStatus">
                   {this.state.status}
                 </div>
-
-                <div>
-                <DetailsList
-                      items={ this.state.TimesheetListItems}
-                      columns={ _timesheetListColumns }
-                      setKey='Id'
-                      checkboxVisibility={ CheckboxVisibility.onHover}
-                      selectionMode={ SelectionMode.single}
-                      layoutMode={ DetailsListLayoutMode.fixedColumns }
-                      compact={ true }
-                       selection={this._selection}
-                  />
-                  </div>
+            ShowTable
+                <div id="divShowTable">
+                  {this.state.showTable}
+                </div>
+                <div style={{display: this.state.showTable === "true" ? 'block' : 'none' }}>
+                  <DetailsList
+                        items={ this.state.TimesheetListItems}
+                        columns={ _timesheetListColumns }
+                        setKey='Id'
+                        checkboxVisibility={ CheckboxVisibility.onHover}
+                        selectionMode={ SelectionMode.single}
+                        layoutMode={ DetailsListLayoutMode.fixedColumns }
+                        compact={ true }
+                        selection={this._selection}
+                    />
+                   </div>
+                </div>
 
                   <div id="ResponsiveTestDiv">
                     <div className="ms-Grid">
@@ -333,8 +356,6 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
                         </div>
                     </div>
                   </div>
-
-
 
   <div className="ms-Grid">
   <div className="ms-Grid-row">
