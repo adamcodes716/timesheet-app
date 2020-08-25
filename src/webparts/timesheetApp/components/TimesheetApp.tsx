@@ -84,7 +84,7 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
   private _onItemsSelectionChanged = () => {
     console.log ("Setting new timesheet list",this._selection.getSelection()[0] );
     this.setState({
-      TimesheetListItem: (this._selection.getSelection()[0] as ITimesheetListItem)
+      TimesheetListItem: (this._selection.getSelection()[0] as ITimesheetListItem), showTable: "false"
     });
   }
 
@@ -127,19 +127,23 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
     public bindDetailsList(message: string) : void {
 
       this._getListItems().then(listItems => {
-        this.setState({ TimesheetListItems: listItems, status: message, showTable: this.state.showTable});
+        this.setState({ TimesheetListItems: listItems, status: message, showTable: "true"});
       });
     }
 
     public componentDidMount(): void {
-      console.log("siteURL", this.props.siteUrl);
-      this.bindDetailsList("All timesheets have been loaded Successfully");
+       this.bindDetailsList("All timesheets have been loaded Successfully");
     }
 
     @autobind
     public btnCreate_click(): void {
-     // $("#timesheetContainer").show();
-      this.setState({ showTable: "false"});
+      this.setState({ showTable: "false", status: null});
+    }
+
+    @autobind
+    public btnCancel_click(): void {
+      this.setState({ showTable: "true"});
+      this.bindDetailsList("Timesheets have been loaded");
     }
 
     @autobind
@@ -157,7 +161,8 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
       .then((response: SPHttpClientResponse) => {
 
         if (response.status === 201) {
-          this.bindDetailsList("Timesheet added and All Timesheets were loaded Successfully");
+          this.setState ({showTable : "true"});
+          this.bindDetailsList("Your timesheet has been submitted");
 
 
 
@@ -189,7 +194,8 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
     .then((response: SPHttpClientResponse) => {
 
       if (response.status === 204) {
-        this.bindDetailsList("Record Updated and All Records were loaded Successfully");
+        this.setState ({showTable : "true"});
+        this.bindDetailsList("Your timesheet has been saved");
 
       } else {
         let errormessage: string = "An error has occured i.e.  " + response.status + " - " + response.statusText;
@@ -213,8 +219,8 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
     this.props.context.spHttpClient.post(url, SPHttpClient.configurations.v1, spHttpClientOptions)
     .then((response: SPHttpClientResponse) => {
       if (response.status === 204) {
-        alert("record got deleted successfully....");
-        this.bindDetailsList("Record deleted and All Records were loaded Successfully");
+        this.setState ({showTable : "true"});
+        this.bindDetailsList("Your timesheet has been deleted");
 
       } else {
         let errormessage: string = "An error has occured i.e.  " + response.status + " - " + response.statusText;
@@ -293,46 +299,41 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
             </div>
           </div>
 
+          <div className={ styles.container } style={{display: this.state.showTable === "false" ? 'block' : 'none' }}>
+                <p className={styles.title}>
+                 <PrimaryButton
+                    text='Submit'
+                    title='Submit'
+                    onClick={this.btnAdd_click}
+                  />
+                 &nbsp;
+                  <PrimaryButton
+                    text='Delete'
+                    onClick={this.btnDelete_click}
+                  />
+                  &nbsp;
+                  <PrimaryButton
+                    text='Cancel'
+                    onClick={this.btnCancel_click}
+                  />
+                </p>
+              </div>
 
 
 
-          <div style={{display: this.state.showTable === "true" ? 'block' : 'none' }}>
+
+          <div className={ styles.container } style={{display: this.state.showTable === "true" ? 'block' : 'none' }}>
                 <p className={styles.title}>
                 <PrimaryButton
                     text='Create'
                     title='Create'
                     onClick={this.btnCreate_click}
                   />
-                  &nbsp;
-
-                   <PrimaryButton
-                    text='Add'
-                    title='Add'
-                    onClick={this.btnAdd_click}
-                  />
-                  &nbsp;
-
-                  <PrimaryButton
-                    text='Update'
-                    onClick={this.btnUpdate_click}
-                  />
-
-                  <PrimaryButton
-                    text='Delete'
-                    onClick={this.btnDelete_click}
-                  />
-                </p>
+                 </p>
               </div>
 
               <div  className={ styles.container } >
-                <div id="divStatus">
-                  {this.state.status}
-                </div>
-            ShowTable
-                <div id="divShowTable">
-                  {this.state.showTable}
-                </div>
-                <div style={{display: this.state.showTable === "true" ? 'block' : 'none' }}>
+                 <div style={{display: this.state.showTable === "true" ? 'block' : 'none' }}>
                   <DetailsList
                         items={ this.state.TimesheetListItems}
                         columns={ _timesheetListColumns }
@@ -344,30 +345,10 @@ export default class TimesheetApp extends React.Component<ITimesheetAppProps, IT
                         selection={this._selection}
                     />
                    </div>
+                 <div id="divStatus">
+                  {this.state.status}
                 </div>
-
-                  <div id="ResponsiveTestDiv">
-                    <div className="ms-Grid">
-                      <div className="ms-Grid-row">
-                        <div className="ms-Grid-col ms-u-sm12">
-                          <div className="ms-fontSize-xl">
-                                    Responsive form demo</div>
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-
-  <div className="ms-Grid">
-  <div className="ms-Grid-row">
-    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">
-      <div className="LayoutPage-demoBlock">A</div>
-    </div>
-    <div className="ms-Grid-col ms-sm6 ms-md8 ms-lg10">
-      <div className="LayoutPage-demoBlock">B</div>
-    </div>
-  </div>
-</div>
-
+                </div>
       </div>
     );
   }

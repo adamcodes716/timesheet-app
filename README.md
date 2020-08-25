@@ -1,6 +1,8 @@
 ## timesheet-app
 
-This is where you include your WebPart documentation.
+SharePoint requirements:
+1.  Create a list called "Timesheets".  You can call it something else if you'd like - just be sure to change the variable if you do.
+2.  Add these columns:  FullName, WeekEnding, Manager, TimesheetID, TotalHours, Status
 
 ### Building the code
 

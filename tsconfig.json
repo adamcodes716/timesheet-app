@@ -29,7 +29,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts", "src/webparts/timesheetApp/components/TimesheetList.js"
   ],
   "exclude": [
     "node_modules",
